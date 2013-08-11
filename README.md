@@ -1,0 +1,4 @@
+decathlon
+=========
+
+Keep it simple
