@@ -1,12 +1,12 @@
 #coding=utf-8
-from selenium import webdriver
+import ConfigParser
+import codecs
+
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait as WDW
 from selenium.webdriver.common.by import By
 
-import time, unittest 
-import config
-import sys 
+import sys
 
 def popup_close(browser):
     WDW(browser, 2).until(EC.presence_of_element_located((By.CLASS_NAME, "popup-footer")))
@@ -31,10 +31,13 @@ def registration(type, browser):
         case_1 = browser.find_element_by_id('cb_noregister').click()
         next_button_1 = browser.find_element_by_css_selector('#cb_noregister_h > .next').click()
     elif type == 'social':
-	    return True #TODO 'To fix it in the next version'
+        return True #TODO 'To fix it in the next version'
     elif type == 'authorisation':
-	    wait_for('#NEW_LOGIN', browser).send_keys(config.stager_login)
-	    wait_for('#USER_PASSWORD', browser).send_keys(config.stager_password)
-	    browser.find_element_by_xpath('//*[@id="cb_auth_h"]/form/fieldset[3]/input').click()
+        testConfig = ConfigParser.RawConfigParser(allow_no_value=True)
+        testConfig.readfp(codecs.open("test.cfg", "r", "utf8"))
+
+        wait_for('#NEW_LOGIN', browser).send_keys(testConfig.get('stager', 'login'))
+        wait_for('#USER_PASSWORD', browser).send_keys(testConfig.get('stager', 'password'))
+        browser.find_element_by_xpath('//*[@id="cb_auth_h"]/form/fieldset[3]/input').click()
     elif type == 'cb_register':
-	    return True #TODO 'We will this catch a capcha one day '
+        return True #TODO 'We will this catch a capcha one day '
